@@ -3,5 +3,10 @@
         "ciudad": "Los angeles",
         "id": "2",
         "nombre": "Los angeles lakers"
+    },
+    {
+        "ciudad": "Chicago",
+        "id": "3",
+        "nombre": "Chicago bulls"
     }
 ]
