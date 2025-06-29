@@ -2,8 +2,15 @@
 #include <fstream>
 #include <string>
 #include <vector>
+
+#ifdef _WIN32
+#include <direct.h>
+#define MKDIR(path) _mkdir(path)
+#else
 #include <sys/stat.h>
 #include <sys/types.h>
+#define MKDIR(path) mkdir(path, 0777)
+#endif
 
 using json = nlohmann::json;
 
@@ -73,12 +80,8 @@ public:
 private:
     void write_all(const std::vector<json> &entities)
     {
-        struct stat info;
         std::string dir = "repository/data";
-        if (stat(dir.c_str(), &info) != 0 || !(info.st_mode & S_IFDIR))
-        {
-            mkdir(dir.c_str(), 0777);
-        }
+        MKDIR(dir.c_str());
         std::ofstream out(filename);
         out << json(entities).dump(4);
     }
