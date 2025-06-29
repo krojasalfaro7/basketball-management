@@ -14,7 +14,7 @@ void mostrar_menu_equipos()
 void mostrar_menu_jugadores()
 {
     std::cout << "\n--- Gestión de Jugadores ---\n";
-    std::cout << "1. Agregar jugador\n2. Editar jugador\n3. Eliminar jugador\n4. Consultar todos\n5. Consultar por equipo\n6. Volver a menu de equipos\n7. Salir\nOpción: ";
+    std::cout << "1. Agregar jugador\n2. Editar jugador\n3. Eliminar jugador\n4. Consultar todos\n5. Consultar por equipo\n6. Volver a menu principal\nOpción: ";
 }
 
 Equipo pedir_equipo(const std::string &id = "")
