@@ -12,7 +12,7 @@ void mostrar_menu()
 
 Equipo pedir_equipo(const std::string &id = "")
 {
-    std::string nombre, ciudad, eid = id;
+    std::string nombre, eid = id;
     if (eid.empty())
     {
         std::cout << "ID: ";
@@ -25,9 +25,7 @@ Equipo pedir_equipo(const std::string &id = "")
     }
     std::cout << "Nombre: ";
     std::getline(std::cin, nombre);
-    std::cout << "Ciudad: ";
-    std::getline(std::cin, ciudad);
-    return Equipo(eid, nombre, ciudad);
+    return Equipo(eid, nombre);
 }
 
 int main()
@@ -87,7 +85,7 @@ int main()
             for (const auto &e : equipos)
             {
                 Equipo eq = Equipo::from_json(e);
-                std::cout << "ID: " << eq.id << ", Nombre: " << eq.nombre << ", Ciudad: " << eq.ciudad << "\n";
+                std::cout << "ID: " << eq.id << ", Nombre: " << eq.nombre << "\n";
             }
         }
         else if (opcion == 5) // Consultar uno
@@ -103,7 +101,7 @@ int main()
             else
             {
                 Equipo eq = Equipo::from_json(*it);
-                std::cout << "ID: " << eq.id << ", Nombre: " << eq.nombre << ", Ciudad: " << eq.ciudad << "\n";
+                std::cout << "ID: " << eq.id << ", Nombre: " << eq.nombre << "\n";
             }
         }
     } while (opcion != 6);
