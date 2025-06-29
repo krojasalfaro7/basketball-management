@@ -8,13 +8,13 @@
 void mostrar_menu_equipos()
 {
     std::cout << "\n--- Gestión de Equipos de Baloncesto ---\n";
-    std::cout << "1. Agregar equipo\n2. Editar equipo\n3. Eliminar equipo\n4. Consultar todos\n5. Consultar uno\n6. Salir\nOpción: ";
+    std::cout << "1. Agregar equipo\n2. Editar equipo\n3. Eliminar equipo\n4. Consultar todos\n5. Consultar uno\n6. Menu de jugadores\n7. Salir\nOpción: ";
 }
 
 void mostrar_menu_jugadores()
 {
     std::cout << "\n--- Gestión de Jugadores ---\n";
-    std::cout << "1. Agregar jugador\n2. Editar jugador\n3. Eliminar jugador\n4. Consultar todos\n5. Consultar por equipo\n6. Volver\nOpción: ";
+    std::cout << "1. Agregar jugador\n2. Editar jugador\n3. Eliminar jugador\n4. Consultar todos\n5. Consultar por equipo\n6. Volver a menu de equipos\n7. Salir\nOpción: ";
 }
 
 Equipo pedir_equipo(const std::string &id = "")
@@ -253,9 +253,12 @@ int main()
                     std::cout << "  (Sin jugadores registrados)" << std::endl;
             }
         }
-    } while (opcion != 6);
 
-    menu_jugadores(repo_equipos, repo_jugadores);
+        else if (opcion == 6) // Menu de jugadores
+        {
+            menu_jugadores(repo_equipos, repo_jugadores);
+        }
+    } while (opcion != 7);
 
     return 0;
 }
