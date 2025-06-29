@@ -67,29 +67,29 @@ Jugador pedir_jugador(const std::vector<nlohmann::json> &equipos, const std::str
 
 void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
 {
-    int op;
+    int opcion;
     do
     {
         mostrar_menu_jugadores();
-        std::cin >> op;
+        std::cin >> opcion;
         auto equipos = repo_equipos.read_all();
-        if (op == 1)
+        if (opcion == 1)
         { // Agregar
-            Jugador j = pedir_jugador(equipos);
-            if (j.id.empty())
+            Jugador jugador = pedir_jugador(equipos);
+            if (jugador.id.empty())
                 continue;
             auto jugadores = repo_jugadores.read_all();
             bool existe = std::any_of(jugadores.begin(), jugadores.end(), [&](const nlohmann::json &e)
-                                      { return e["id"] == j.id; });
+                                      { return e["id"] == jugador.id; });
             if (existe)
                 std::cout << "ID ya existe.\n";
             else
             {
-                repo_jugadores.create(j.to_json());
+                repo_jugadores.create(jugador.to_json());
                 std::cout << "Jugador agregado.\n";
             }
         }
-        else if (op == 2)
+        else if (opcion == 2)
         { // Editar
             std::string id;
             std::cout << "ID a editar: ";
@@ -101,14 +101,14 @@ void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
                 std::cout << "No existe ese jugador.\n";
             else
             {
-                Jugador j = pedir_jugador(equipos, id);
-                if (j.id.empty())
+                Jugador jugador = pedir_jugador(equipos, id);
+                if (jugador.id.empty())
                     continue;
-                repo_jugadores.update(id, j.to_json());
+                repo_jugadores.update(id, jugador.to_json());
                 std::cout << "Jugador actualizado.\n";
             }
         }
-        else if (op == 3)
+        else if (opcion == 3)
         { // Eliminar
             std::string id;
             std::cout << "ID a eliminar: ";
@@ -118,17 +118,17 @@ void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
             else
                 std::cout << "No existe ese jugador.\n";
         }
-        else if (op == 4)
+        else if (opcion == 4)
         { // Consultar todos
             auto jugadores = repo_jugadores.read_all();
             std::cout << "\nJugadores registrados:\n";
             for (const auto &e : jugadores)
             {
-                Jugador j = Jugador::from_json(e);
-                std::cout << "ID: " << j.id << ", Nombre: " << j.nombre << ", Posición: " << j.posicion << ", Equipo: " << j.equipo_id << "\n";
+                Jugador jugador = Jugador::from_json(e);
+                std::cout << "ID: " << jugador.id << ", Nombre: " << jugador.nombre << ", Posición: " << jugador.posicion << ", Equipo: " << jugador.equipo_id << "\n";
             }
         }
-        else if (op == 5)
+        else if (opcion == 5)
         { // Consultar por equipo
             std::string equipo_id;
             std::cout << "ID del equipo: ";
@@ -139,12 +139,12 @@ void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
             {
                 if (e["equipo_id"] == equipo_id)
                 {
-                    Jugador j = Jugador::from_json(e);
-                    std::cout << "ID: " << j.id << ", Nombre: " << j.nombre << ", Posición: " << j.posicion << "\n";
+                    Jugador jugador = Jugador::from_json(e);
+                    std::cout << "ID: " << jugador.id << ", Nombre: " << jugador.nombre << ", Posición: " << jugador.posicion << "\n";
                 }
             }
         }
-    } while (op != 6);
+    } while (opcion != 6);
 }
 
 int main()
@@ -209,11 +209,11 @@ int main()
                 std::cout << "ID: " << eq.id << ", Nombre: " << eq.nombre << "\n";
                 // Mostrar jugadores del equipo
                 bool hay_jugadores = false;
-                for (const auto &j : jugadores)
+                for (const auto &jugador : jugadores)
                 {
-                    if (j["equipo_id"] == eq.id)
+                    if (jugador["equipo_id"] == eq.id)
                     {
-                        Jugador jug = Jugador::from_json(j);
+                        Jugador jug = Jugador::from_json(jugador);
                         std::cout << "  ID: " << jug.id << ", Nombre: " << jug.nombre << ", Posición: " << jug.posicion << std::endl;
                         hay_jugadores = true;
                     }
@@ -244,8 +244,8 @@ int main()
                 {
                     if (e["equipo_id"] == eq.id)
                     {
-                        Jugador j = Jugador::from_json(e);
-                        std::cout << "  ID: " << j.id << ", Nombre: " << j.nombre << ", Posición: " << j.posicion << std::endl;
+                        Jugador jugador = Jugador::from_json(e);
+                        std::cout << "  ID: " << jugador.id << ", Nombre: " << jugador.nombre << ", Posición: " << jugador.posicion << std::endl;
                         hay_jugadores = true;
                     }
                 }
