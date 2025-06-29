@@ -8,13 +8,13 @@
 void mostrar_menu_equipos()
 {
     std::cout << "\n--- Gestión de Equipos de Baloncesto ---\n";
-    std::cout << "1. Agregar equipo\n2. Editar equipo\n3. Eliminar equipo\n4. Consultar todos\n5. Consultar uno\n6. Menu de jugadores\n7. Salir\nOpción: ";
+    std::cout << "1. Agregar equipo\n2. Editar equipo\n3. Eliminar equipo\n4. Consultar todos\n5. Consultar uno\n6. Menú de jugadores\n7. Salir\nOpción: ";
 }
 
 void mostrar_menu_jugadores()
 {
     std::cout << "\n--- Gestión de Jugadores ---\n";
-    std::cout << "1. Agregar jugador\n2. Editar jugador\n3. Eliminar jugador\n4. Consultar todos\n5. Consultar por equipo\n6. Volver a menu principal\nOpción: ";
+    std::cout << "1. Agregar jugador\n2. Editar jugador\n3. Eliminar jugador\n4. Consultar todos\n5. Consultar por equipo\n6. Volver a menú principal\nOpción: ";
 }
 
 Equipo pedir_equipo(const std::string &id = "")
