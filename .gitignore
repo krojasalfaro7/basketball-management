@@ -1,2 +1,4 @@
 .vscode
-*.json
+equipos.json
+jugadores.json
+main
