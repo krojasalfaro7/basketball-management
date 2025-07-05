@@ -2,15 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-
-#ifdef _WIN32
-#include <direct.h>
-#define MKDIR(path) _mkdir(path)
-#else
-#include <sys/stat.h>
-#include <sys/types.h>
-#define MKDIR(path) mkdir(path, 0777)
-#endif
+#include <filesystem>
 
 using json = nlohmann::json;
 
@@ -19,8 +11,13 @@ class Repository
     std::string filename;
 
 public:
-    // Ajusta la ruta para que todos los métodos usen repository/data/
-    Repository(const std::string &file) : filename("repository/data/" + file) {}
+    Repository(const std::string &file)
+    {
+        // Usa filesystem para ruta absoluta y multiplataforma
+        std::filesystem::path data_dir = std::filesystem::current_path() / "repository" / "data";
+        std::filesystem::create_directories(data_dir);
+        filename = (data_dir / file).string();
+    }
 
     // Create: agrega una nueva entidad al archivo json
     void create(const json &entity)
@@ -80,8 +77,6 @@ public:
 private:
     void write_all(const std::vector<json> &entities)
     {
-        std::string dir = "repository/data";
-        MKDIR(dir.c_str());
         std::ofstream out(filename);
         out << json(entities).dump(4);
     }
