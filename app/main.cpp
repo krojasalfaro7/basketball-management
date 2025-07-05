@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <filesystem>
 #include "models/equipo.hpp"
 #include "models/jugador.hpp"
 #include "repository/repository.cpp"
@@ -161,10 +162,11 @@ void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
     } while (opcion != 6);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    Repository repo_equipos("equipos.json");
-    Repository repo_jugadores("jugadores.json");
+    std::filesystem::path exe_dir = std::filesystem::absolute(argv[0]).parent_path();
+    Repository repo_equipos(exe_dir / "repository/data/equipos.json");
+    Repository repo_jugadores(exe_dir / "repository/data/jugadores.json");
     int opcion;
     do
     {

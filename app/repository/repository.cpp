@@ -11,12 +11,10 @@ class Repository
     std::string filename;
 
 public:
-    Repository(const std::string &file)
+    Repository(const std::filesystem::path &file)
     {
-        // Usa filesystem para ruta absoluta y multiplataforma
-        std::filesystem::path data_dir = std::filesystem::current_path() / "repository" / "data";
-        std::filesystem::create_directories(data_dir);
-        filename = (data_dir / file).string();
+        std::filesystem::create_directories(file.parent_path());
+        filename = file.string();
     }
 
     // Create: agrega una nueva entidad al archivo json
