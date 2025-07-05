@@ -8,13 +8,13 @@
 void mostrar_menu_equipos()
 {
     std::cout << "\n--- Menu de Equipos de Baloncesto ---\n";
-    std::cout << "1. Agregar equipo\n2. Editar equipo\n3. Eliminar equipo\n4. Consultar todos\n5. Consultar uno\n6. Menu de jugadores\n7. Salir\nOpcion: ";
+    std::cout << "1. Agregar equipo\n2. Editar equipo\n3. Eliminar equipo\n4. Ver todos\n5. Ver uno\n6. Menu de jugadores\n7. Salir\nOpcion: ";
 }
 
 void mostrar_menu_jugadores()
 {
     std::cout << "\n--- Menu de Jugadores ---\n";
-    std::cout << "1. Agregar jugador\n2. Editar jugador\n3. Eliminar jugador\n4. Consultar todos\n5. Consultar por equipo\n6. Volver a menu principal\nOpcion: ";
+    std::cout << "1. Agregar jugador\n2. Editar jugador\n3. Eliminar jugador\n4. Ver todos\n5. Ver por equipo\n6. Volver a menu principal\nOpcion: ";
 }
 
 Equipo pedir_equipo(const std::string &id = "")
@@ -37,7 +37,8 @@ Equipo pedir_equipo(const std::string &id = "")
 
 Jugador pedir_jugador(const std::vector<nlohmann::json> &equipos, const std::string &id = "")
 {
-    std::string nombre, posicion, equipo_id, jid = id;
+    std::string nombre, edad, altura, peso, nacionalidad, fecha_ingreso, posicion, equipo_id, jid = id;
+
     if (jid.empty())
     {
         std::cout << "ID: ";
@@ -50,7 +51,17 @@ Jugador pedir_jugador(const std::vector<nlohmann::json> &equipos, const std::str
     }
     std::cout << "Nombre: ";
     std::getline(std::cin, nombre);
-    std::cout << "Posición: ";
+    std::cout << "Edad: ";
+    std::getline(std::cin, edad);
+    std::cout << "Altura: ";
+    std::getline(std::cin, altura);
+    std::cout << "Peso: ";
+    std::getline(std::cin, peso);
+    std::cout << "Nacionalidad: ";
+    std::getline(std::cin, nacionalidad);
+    std::cout << "Fecha de ingreso: ";
+    std::getline(std::cin, fecha_ingreso);
+    std::cout << "Posicion: ";
     std::getline(std::cin, posicion);
     std::cout << "ID del equipo: ";
     std::getline(std::cin, equipo_id);
@@ -62,7 +73,7 @@ Jugador pedir_jugador(const std::vector<nlohmann::json> &equipos, const std::str
         std::cout << "Equipo no existe.\n";
         return Jugador();
     }
-    return Jugador(jid, nombre, posicion, equipo_id);
+    return Jugador(jid, nombre, edad, altura, peso, nacionalidad, fecha_ingreso, posicion, equipo_id);
 }
 
 void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
@@ -73,11 +84,14 @@ void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
         mostrar_menu_jugadores();
         std::cin >> opcion;
         auto equipos = repo_equipos.read_all();
-        if (opcion == 1)
-        { // Agregar
+
+        if (opcion == 1) // Agregar
+        {
             Jugador jugador = pedir_jugador(equipos);
+
             if (jugador.id.empty())
                 continue;
+
             auto jugadores = repo_jugadores.read_all();
             bool existe = std::any_of(jugadores.begin(), jugadores.end(), [&](const nlohmann::json &e)
                                       { return e["id"] == jugador.id; });
@@ -89,8 +103,8 @@ void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
                 std::cout << "Jugador agregado.\n";
             }
         }
-        else if (opcion == 2)
-        { // Editar
+        else if (opcion == 2) // Editar
+        {
             std::string id;
             std::cout << "ID a editar: ";
             std::cin >> id;
@@ -108,8 +122,8 @@ void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
                 std::cout << "Jugador actualizado.\n";
             }
         }
-        else if (opcion == 3)
-        { // Eliminar
+        else if (opcion == 3) // Eliminar
+        {
             std::string id;
             std::cout << "ID a eliminar: ";
             std::cin >> id;
@@ -118,18 +132,18 @@ void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
             else
                 std::cout << "No existe ese jugador.\n";
         }
-        else if (opcion == 4)
-        { // Consultar todos
+        else if (opcion == 4) // Ver todos
+        {
             auto jugadores = repo_jugadores.read_all();
             std::cout << "\nJugadores registrados:\n";
             for (const auto &e : jugadores)
             {
                 Jugador jugador = Jugador::from_json(e);
-                std::cout << "ID: " << jugador.id << ", Nombre: " << jugador.nombre << ", Posición: " << jugador.posicion << ", Equipo: " << jugador.equipo_id << "\n";
+                std::cout << "ID: " << jugador.id << ", Nombre: " << jugador.nombre << ", Edad: " << jugador.edad << ", Altura: " << jugador.altura << ", Peso: " << jugador.peso << ", Nacionalidad: " << jugador.nacionalidad << ", Fecha de ingreso: " << jugador.fecha_ingreso << ", Posicion: " << jugador.posicion << ", Equipo: " << jugador.equipo_id << "\n";
             }
         }
-        else if (opcion == 5)
-        { // Consultar por equipo
+        else if (opcion == 5) // Ver por equipo
+        {
             std::string equipo_id;
             std::cout << "ID del equipo: ";
             std::cin >> equipo_id;
@@ -140,7 +154,7 @@ void menu_jugadores(Repository &repo_equipos, Repository &repo_jugadores)
                 if (e["equipo_id"] == equipo_id)
                 {
                     Jugador jugador = Jugador::from_json(e);
-                    std::cout << "ID: " << jugador.id << ", Nombre: " << jugador.nombre << ", Posición: " << jugador.posicion << "\n";
+                    std::cout << "ID: " << jugador.id << ", Nombre: " << jugador.nombre << ", Posicion: " << jugador.posicion << "\n";
                 }
             }
         }
@@ -198,7 +212,7 @@ int main()
             else
                 std::cout << "No existe ese equipo.\n";
         }
-        else if (opcion == 4) // Consultar todos
+        else if (opcion == 4) // Ver todos
         {
             auto equipos = repo_equipos.read_all();
             auto jugadores = repo_jugadores.read_all();
@@ -214,7 +228,7 @@ int main()
                     if (jugador["equipo_id"] == eq.id)
                     {
                         Jugador jug = Jugador::from_json(jugador);
-                        std::cout << "  ID: " << jug.id << ", Nombre: " << jug.nombre << ", Posición: " << jug.posicion << std::endl;
+                        std::cout << "  ID: " << jug.id << ", Nombre: " << jug.nombre << ", Edad: " << jug.edad << ", Altura: " << jug.altura << ", Peso: " << jug.peso << ", Nacionalidad: " << jug.nacionalidad << ", Fecha de ingreso: " << jug.fecha_ingreso << ", Posicion: " << jug.posicion << std::endl;
                         hay_jugadores = true;
                     }
                 }
@@ -222,7 +236,7 @@ int main()
                     std::cout << "  (Sin jugadores registrados)" << std::endl;
             }
         }
-        else if (opcion == 5) // Consultar uno
+        else if (opcion == 5) // Ver uno
         {
             std::string id;
             std::cout << "ID a consultar: ";
@@ -245,7 +259,7 @@ int main()
                     if (e["equipo_id"] == eq.id)
                     {
                         Jugador jugador = Jugador::from_json(e);
-                        std::cout << "  ID: " << jugador.id << ", Nombre: " << jugador.nombre << ", Posición: " << jugador.posicion << std::endl;
+                        std::cout << "  ID: " << jugador.id << ", Nombre: " << jugador.nombre << ", Posicion: " << jugador.posicion << std::endl;
                         hay_jugadores = true;
                     }
                 }
