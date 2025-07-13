@@ -3,48 +3,40 @@
 #include <string>
 #include <vector>
 
-#ifdef _WIN32
-#include <direct.h>
-#define MKDIR(path) _mkdir(path)
-#else
-#include <sys/stat.h>
-#include <sys/types.h>
-#define MKDIR(path) mkdir(path, 0777)
-#endif
-
 using json = nlohmann::json;
+using namespace std;
 
 class Repository
 {
-    std::string filename;
+    string filename;
 
 public:
     // Ajusta la ruta para que todos los métodos usen repository/data/
-    Repository(const std::string &file) : filename("repository/data/" + file) {}
+    Repository(const string &file) : filename(file) {}
 
     // Create: agrega una nueva entidad al archivo json
     void create(const json &entity)
     {
-        std::vector<json> entities = read_all();
+        vector<json> entities = read_all();
         entities.push_back(entity);
         write_all(entities);
     }
 
     // Read: obtiene todas las entidades
-    std::vector<json> read_all()
+    vector<json> read_all()
     {
-        std::ifstream in(filename);
+        ifstream in(filename);
         if (!in.is_open())
             return {};
         json j;
         in >> j;
         if (!j.is_array())
             return {};
-        return j.get<std::vector<json>>();
+        return j.get<vector<json>>();
     }
 
     // Update: actualiza una entidad por id
-    bool update(const std::string &id, const json &new_entity)
+    bool update(const string &id, const json &new_entity)
     {
         auto entities = read_all();
         bool updated = false;
@@ -63,11 +55,11 @@ public:
     }
 
     // Delete: elimina una entidad por id
-    bool remove(const std::string &id)
+    bool remove(const string &id)
     {
         auto entities = read_all();
-        auto it = std::remove_if(entities.begin(), entities.end(), [&](const json &e)
-                                 { return e.contains("id") && e["id"] == id; });
+        auto it = remove_if(entities.begin(), entities.end(), [&](const json &e)
+                            { return e.contains("id") && e["id"] == id; });
         if (it != entities.end())
         {
             entities.erase(it, entities.end());
@@ -78,11 +70,9 @@ public:
     }
 
 private:
-    void write_all(const std::vector<json> &entities)
+    void write_all(const vector<json> &entities)
     {
-        std::string dir = "repository/data";
-        MKDIR(dir.c_str());
-        std::ofstream out(filename);
+        ofstream out(filename);
         out << json(entities).dump(4);
     }
 };
