@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "models/equipo.hpp"
 #include "models/jugador.hpp"
-#include "repository/repository.cpp"
+#include "repository.cpp"
 using namespace std;
 
 void mostrar_menu_equipos()
