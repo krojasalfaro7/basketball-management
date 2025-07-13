@@ -200,7 +200,19 @@ int main()
             std::cout << "ID a eliminar: ";
             std::cin >> id;
             if (repo_equipos.remove(id))
+            {
                 std::cout << "Equipo eliminado.\n";
+
+                // Eliminar jugadores del equipo
+                auto jugadores_del_equipo = repo_jugadores.read_all();
+                for (const auto &jugador : jugadores_del_equipo)
+                {
+                    if (jugador["equipo_id"] == id)
+                    {
+                        repo_jugadores.remove(jugador["id"]);
+                    }
+                }
+            }
             else
                 std::cout << "No existe ese equipo.\n";
         }
